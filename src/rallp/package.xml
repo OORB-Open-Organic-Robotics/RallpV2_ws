@@ -18,6 +18,8 @@
   <depend>nav2_bringup</depend>
   <depend>slam_toolbox</depend>
   <depend>xacro</depend>
+  <depend>joy</depend>
+  <depend>teleop_twist_joy</depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
   <export>
