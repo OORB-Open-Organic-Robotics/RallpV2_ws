@@ -1,0 +1,28 @@
+torque_vectoring_node:
+  ros__parameters:
+    # Robot physical parameters
+    wheel_radius: 0.125          # meters
+    wheel_separation: 0.59       # meters (left-right distance)
+    wheelbase: 0.49             # meters (front-rear distance)
+    
+    # Control parameters
+    max_torque: 10.0            # Nm
+    power_limit: 100.0          # Watts
+    
+    # Slip detection parameters
+    slip_threshold: 0.2         # Slip ratio threshold (20%)
+    slip_detection_window: 0.1  # seconds
+    
+    # Torque vectoring parameters
+    enable_torque_vectoring: true
+    vectoring_gain: 0.5         # Gain for torque redistribution (0.0-1.0)
+    
+    # Safety parameters
+    sensor_timeout: 0.5         # seconds
+    fallback_enabled: true
+    
+    # Debug parameters
+    publish_debug: true
+    debug_rate: 50.0           # Hz
+    log_power_consumption: true
+    log_interval: 5.0          # seconds

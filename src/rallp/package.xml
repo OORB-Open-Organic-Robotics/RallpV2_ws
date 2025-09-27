@@ -4,7 +4,7 @@
   <name>rallp</name>
   <version>0.0.0</version>
   <description>RallP robot package</description>
-  <maintainer email="ahmed-jeljli@todo.todo">ahmed-jeljli</maintainer>
+  <maintainer email="mansourmohamadamine@gmail.com">alpha</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_python</buildtool_depend>
   <depend>rclpy</depend>

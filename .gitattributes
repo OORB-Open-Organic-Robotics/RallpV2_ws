@@ -2,5 +2,6 @@
 *.pgm filter=lfs diff=lfs merge=lfs -text
 *.dae filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
+*.json filter=lfs diff=lfs merge=lfs -text
 src/rallp/meshes/DAE/**/*.dae filter=lfs diff=lfs merge=lfs -text
 src/rallp/meshes/STL/**/*.stl filter=lfs diff=lfs merge=lfs -text
