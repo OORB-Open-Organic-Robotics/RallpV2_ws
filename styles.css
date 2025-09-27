@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Mono:400,700&display=swap');
+
+body {
+  font-family: 'Fira Mono', monospace, Consolas, 'Courier New';
+  background: #fff;
+  color: #111;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  background-color: #00bccd;
+  padding: 10px 20px;
+  color: white;
+  box-shadow: 0 4px 8px #00bccd66;
+}
+
+.logo {
+  height: 45px;
+  margin-right: 15px;
+  object-fit: contain;
+}
+
+h1 {
+  font-size: 1.6em;
+  margin: 0;
+  font-weight: 700;
+}
+
+nav {
+  background-color: #00a5b5;
+  display: flex;
+  justify-content: center;
+  border-bottom: 2px solid #007a82;
+}
+
+nav button {
+  background: none;
+  border: none;
+  padding: 14px 24px;
+  font-size: 1.1em;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: background 0.3s;
+}
+
+nav button:hover,
+nav button:focus {
+  background-color: #007a82;
+  outline: none;
+}
+
+nav button.active {
+  background-color: #005f63;
+}
+
+main {
+  max-width: 450px;
+  margin: 30px auto 50px;
+  padding: 0 20px;
+}
+
+.panel {
+  display: none;
+  background: #fff;
+  padding: 25px 30px;
+  border: 2px solid #00bccd;
+  border-radius: 12px;
+  box-shadow: 0 6px 28px #ddd6;
+  flex-direction: column;
+}
+
+.panel.visible {
+  display: flex;
+}
+
+h2 {
+  font-weight: 700;
+  color: #00bccd;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.topic-label {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+#active-topic {
+  color: #00bccd;
+  font-weight: 700;
+}
+
+#topic-selector {
+  display: flex;
+  margin-bottom: 18px;
+}
+
+#topicInput {
+  flex: 1;
+  padding: 7px 10px;
+  font-size: 1em;
+  border: 1.8px solid #00bccd;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+  background: #f8fafd;
+  color: #111;
+  transition: border-color 0.15s;
+}
+
+#setTopicBtn {
+  border: 1.8px solid #00bccd;
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  background-color: #00bccd;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 8px 16px;
+  outline: none;
+  transition: background-color 0.15s ease;
+}
+
+#setTopicBtn:hover,
+#setTopicBtn:active {
+  background-color: #10a5b5;
+}
+
+#controls {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  grid-template-rows: repeat(3, 80px);
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+#controls button {
+  font-weight: 700;
+  font-size: 2.5em;
+  border: 2px solid #00bccd;
+  border-radius: 10px;
+  background: #f7fafb;
+  color: #00bccd;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+#controls button:hover,
+#controls button:focus {
+  background-color: #00bccd;
+  color: #fff;
+}
+
+/* Status box */
+#status {
+  background: #f1feff;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 1em;
+  text-align: center;
+  font-weight: 600;
+  min-height: 1.8em;
+  color: #00bccd;
+}
+
+/* Monitoring panel */
+
+#topic-input-area {
+  display: flex;
+  margin-bottom: 14px;
+  gap: 6px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.topic-label-monitor {
+  font-weight: 700;
+  color: #333;
+  min-width: 210px;
+  font-size: 1em;
+}
+
+#newTopicInput {
+  flex: 1 1 60%;
+  padding: 6px 10px;
+  font-family: 'Fira Mono', monospace;
+  font-size: 1em;
+  border: 1.8px solid #00bccd;
+  border-radius: 6px;
+  outline: none;
+  background: #f8fafd;
+  color: #111;
+  transition: border-color 0.15s;
+  min-width: 200px;
+}
+
+#addTopicBtn {
+  padding: 7px 16px;
+  font-size: 1em;
+  border: none;
+  border-radius: 6px;
+  background-color: #00bccd;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+}
+
+#addTopicBtn:hover,
+#addTopicBtn:active {
+  background-color: #10a5b5;
+}
+
+#sensor-panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* Each sensor panel */
+.sensor-panel {
+  background: #f7fafb;
+  border-radius: 8px;
+  border: 1px solid #00bccd;
+  padding: 12px 10px 10px 10px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 6px #00bccd33;
+  font-family: 'Fira Mono', monospace;
+  display: flex;
+  flex-direction: column;
+  min-height: 220px;
+}
+
+.sensor-panel h3 {
+  margin: 0 0 10px 0;
+  color: #00bccd;
+  font-weight: 700;
+  font-size: 1.1em;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  main {
+    max-width: 95vw;
+  }
+  #controls {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 60px);
+  }
+  #controls button {
+    font-size: 2em;
+  }
+  #topicInput,
+  #setTopicBtn,
+  #newTopicInput,
+  #addTopicBtn {
+    font-size: 1em;
+  }
+}

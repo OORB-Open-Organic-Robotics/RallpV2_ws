@@ -38,3 +38,13 @@ The `teleop_twist` branch adds joystick-based teleoperation to the RallP robot u
 - **Launch Files**:
   - `rallp/launch/joystick.launch.py`: Launches joystick teleoperation.
   - `rallp/launch/main_launch2.launch.py`: Updated for teleoperation support.
+
+
+
+  ## Web Dev Branch
+The `web_dev` branch adds a web-based interface for controlling and monitoring the RallP robot using `app.js`, `index.html`, `styles.css`, and `oorb_logo.png`. It uses `rosbridge_server` for ROS2 communication.
+- **Web Interface**: Run `ros2 launch rosbridge_server rosbridge_websocket_launch.xml` and `node app.js`, then access via browser (e.g., http://localhost:3000).
+- **ROS2 Integration**: Retains `sensor_fusion` and `teleop_twist` functionality with `rallp` package.
+- **Launch Files**:
+  - `rallp/launch/main_launch2.launch.py`: Core simulation with `twist_mux`.
+  - `rallp/launch/joystick.launch.py`: Joystick teleoperation.

@@ -7,15 +7,15 @@
   </gazebo>
 
   <!-- Includes -->
-  <xacro:include filename="$(find rallp)/urdf2/robot_core.xacro"/>
-  <xacro:include filename="$(find rallp)/urdf2/inertial_macros.xacro"/>
-  <xacro:include filename="$(find rallp)/urdf2/lidar.xacro"/>
-  <xacro:include filename="$(find rallp)/urdf2/camera.xacro"/>
-  <xacro:include filename="$(find rallp)/urdf2/gazebo_control.xacro"/>
-  <xacro:include filename="$(find rallp)/urdf2/ros2_control.xacro"/> 
+  <xacro:include filename="$(find rallp)/urdf/robot_core.xacro"/>
+  <xacro:include filename="$(find rallp)/urdf/inertial_macros.xacro"/>
+  <xacro:include filename="$(find rallp)/urdf/lidar.xacro"/>
+  <xacro:include filename="$(find rallp)/urdf/camera.xacro"/>
+  <xacro:include filename="$(find rallp)/urdf/gazebo_control.xacro"/>
+  <xacro:include filename="$(find rallp)/urdf/ros2_control.xacro"/> 
 
   <!-- Define properties -->
-  <xacro:property name="base_mesh_path" value="file:///home/ahmed-jeljli/rallp_v2.1/src/rallp/meshes/DAE"/>
+  <xacro:property name="base_mesh_path" value="file://$(find rallp)/meshes/DAE"/>
   <xacro:property name="wheel_scale" value="1.5 1.5 1.5"/>
   <!-- Main robot structure -->
   <xacro:robot_core 

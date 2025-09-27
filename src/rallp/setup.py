@@ -21,6 +21,7 @@ setup(
         (os.path.join('share', package_name, 'meshes/DAE/wheel'), glob(os.path.join('meshes/DAE/wheel', '*.dae'))),
         (os.path.join('share', package_name, 'meshes/DAE/lidar_base'), glob(os.path.join('meshes/DAE/lidar_base', '*.dae'))),
         (os.path.join('share', package_name, 'meshes/DAE/lidar_head'), glob(os.path.join('meshes/DAE/lidar_head', '*.dae'))),
+        (os.path.join('share', package_name), ['app.js', 'index.html', 'styles.css', 'oorb_logo.png']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
