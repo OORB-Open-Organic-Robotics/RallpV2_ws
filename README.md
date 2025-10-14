@@ -48,7 +48,7 @@ The `web_dev` branch adds a browser-based interface for controlling and monitori
 
 First, ensure you have the following installed on **Ubuntu 24.04 LTS**:
 
-1.  **[ROS 2 Jazzy](https://docs.ros.org/en/jazzy/Installation/Alternatives/Ubuntu-Development-Setup.html)**: Follow the official "Desktop Install" instructions.
+1.  **[ROS 2 Jazzy](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html)**: Follow the official "Desktop Install" instructions.
 2.  **[Gazebo Harmonic](https://gazebosim.org/docs/harmonic/install_ubuntu)**
 3.  **[Navigation2](https://navigation.ros.org/getting_started/index.html)**: Installation is usually included with the `ros-jazzy-desktop` installation.
 
