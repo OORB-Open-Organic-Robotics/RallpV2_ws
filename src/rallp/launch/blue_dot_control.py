@@ -8,7 +8,8 @@ from std_msgs.msg import String
 class BlueDotControl(Node):
     def __init__(self):
         super().__init__('blue_dot_control')
-        self.publisher = self.create_publisher(Twist, '/cmd_vel_joy', 10)
+        # Publish directly to cmd_vel so twist_mux can forward inputs to the diff drive controller.
+        self.publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.bd = BlueDot()
         self.bd.when_pressed = self.on_press
         self.bd.when_moved = self.on_move

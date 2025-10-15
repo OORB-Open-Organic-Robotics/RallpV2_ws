@@ -137,7 +137,7 @@ def generate_launch_description():
         DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path, description='Absolute path to rviz config file'),
         DeclareLaunchArgument(name='enable_bluedot', default_value='False', description='Enable Blue Dot controller'),
         DeclareLaunchArgument(name='use_ros2_control', default_value='False', description='Load ros2_control components'),
-        DeclareLaunchArgument(name='cmd_vel_target', default_value='/cmd_vel', description='Twist mux output topic'),
+        DeclareLaunchArgument(name='cmd_vel_target', default_value='/cmd_vel_mux', description='Twist mux output topic'),
         blue_dot,
         twist_mux,
         robot_state_publisher_node,
