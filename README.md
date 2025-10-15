@@ -6,6 +6,7 @@ This workspace (`~/rallpV2_ws/`) integrates multiple branches for the RallP robo
 - **Packages**:
   - `rallp`: Core package for robot control, sensor fusion, and teleoperation.
   - `rallp_torque`: Dedicated package for torque vectoring control and testing.
+  - `navigation`: Dedicated for sensor fusion algorithms.
 - **Web Interface**: Browser-based control and visualization using `app.js`, `index.html`, `styles.css`, and `oorb_logo.png`.
 - **Environment**: ROS2 Jazzy, built with `colcon`, using a virtual environment (`venv`).
 
@@ -32,14 +33,29 @@ The `rallp_torque` package implements torque vectoring control from the `torque_
   - **Launch Files**:
     - `main_launch_torque_vectoring.launch.py`: Main simulation with torque vectoring.
     - `torque_vectoring_launch.py`: Torque-specific launch.
+   
+## navigation Package
+This package provides autonomous navigation capabilities for the robot. It integrates multiple sensors (LiDAR, IMU, encoders, and cameras) to perform sensor fusion, enabling accurate localization, mapping, and path planning.
+
+  - **Functionality**:
+    - **Sensor Fusion**: Combines LiDAR, IMU, and odometry data for robust localization.
+    - **Mapping**: Generates 2D maps in real-time using SLAM techniques.
+    - **Localization**: Estimates the robot's position and orientation in dynamic environments.
+    - **Path Planning**: Plans and follows safe paths avoiding obstacles.
+  - **Launch Files**:
+      - `navigation.launch.py` – Main launch file for the navigation package (includes mapping, localization, and path planning nodes).
+      - `spawn.launch.py` – Spawn the robot in simulation.
+      - `mapping.launch.py` – Start mapping nodes for the navigation stack.
+      - `localization.launch.py` – Start localization nodes using sensor fusion.
+
 
 ## Web Interface
-The `web_dev` branch adds a browser-based interface for controlling and monitoring the RallP robot.
+The `web_dev`-related files add a browser-based interface for controlling and monitoring the RallP robot.
 
 - **Functionality**:
   - Uses `app.js`, `index.html`, `styles.css`, and `oorb_logo.png` to provide a web dashboard.
   - Communicates with ROS2 via `rosbridge_server` (WebSocket interface).
-  - Likely controls the robot via `/cmd_vel` and visualizes data like `/scan` (LiDAR).
+  - Controls the robot via `/cmd_vel` and visualizes data like `/scan` (LiDAR).
 
 ## Setup Instructions
 
@@ -56,16 +72,15 @@ First, ensure you have the following installed on **Ubuntu 24.04 LTS**:
 Create a ROS 2 workspace to house the project.
 
 ```bash
-mkdir -p ~/rallp_ws/src
+mkdir ~/rallp_ws
 cd ~/rallp_ws
 ```
 
 
 ### Step 2: Clone the Repository
-Clone this repository directly into your workspace's src folder.
+Clone this repository directly into your workspace.
 
 ```bash
-cd src
 git clone https://github.com/OORB-Open-Organic-Robotics/rallp_v2.git rallp
 ```
 
@@ -136,3 +151,64 @@ Once the simulation is running, open a new terminal, source your workspace again
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped
 ```
 
+## Web Interface
+This package adds a browser-based interface for controlling and monitoring the RallP robot.
+
+- **Functionality**:
+  - Uses `app.js`, `index.html`, `styles.css`, and `oorb_logo.png` to provide a web dashboard.
+  - Communicates with ROS2 via `rosbridge_server` (WebSocket interface).
+  - Likely controls the robot via `/cmd_vel` and visualizes data like `/scan` (LiDAR).
+
+---
+
+### How to Run the Web Interface
+
+1. **Run ROS2 and rosbridge**
+
+   On your robot or laptop with ROS 2 installed, in the workspace directory:
+
+   ```bash
+   ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+   ```
+
+  By default, rosbridge server runs at ws://localhost:9090.
+
+2.  **Serve the Web Interface**
+
+  Navigate in your terminal to the workspace directory containing the web interface files (app.js, index.html, etc.), then run a simple HTTP server:
+
+  ```bash
+  python3 -m http.server 8000
+  ```
+
+3. **Open the Web Interface**
+
+  In your web browser, go to:
+
+  http://localhost:8000
+
+  ### Usage
+  
+  - **Control Panel**
+    Use the **Control Panel** tab to publish robot movement commands.
+
+    The **Active topic** defaults to `/cmd_vel` but can be changed by typing a new topic and clicking Set Topic.
+
+    Control buttons — Forward, Backward, Left, Right, and Stop — send velocity commands using the chosen topic.
+
+    The status bar shows connection status and the last command sent.
+    
+  - **Real-Time Monitoring**
+    Switch to the Real-Time Monitoring tab to subscribe dynamically to sensor topics.
+
+    Enter one or more topic names separated by commas (e.g., `/imu`, `/joint_states`, `/image_raw`).
+
+    Click Add Topic to start subscription.
+
+    Panels will be created for each topic:
+
+    Numeric topics (e.g., IMU, joint states) show real-time graphs of numeric fields.
+
+    Image topics (e.g., `/image_raw`) render live images.
+
+    The layout adjusts dynamically as you add topics.
