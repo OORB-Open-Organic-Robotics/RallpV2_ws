@@ -1,3 +1,6 @@
 [submodule "src/src/rplidar_ros2"]
 	path = src/src/rplidar_ros2
 	url = https://github.com/babakhani/rplidar_ros2.git
+[submodule "src/rplidar_ros2"]
+	path = src/rplidar_ros2
+	url = https://github.com/babakhani/rplidar_ros2.git
