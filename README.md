@@ -3,7 +3,7 @@
 Clone the project repository into your ROS 2 workspace directory:
 ```bash
 cd <ws_name>
-git clone -b LidarOnly --single-branch https://github.com/OORB-Open-Organic-Robotics/RallpV2_ws.git
+git clone ---recurse-submodules -b LidarOnly https://github.com/OORB-Open-Organic-Robotics/RallpV2_ws.git
 ```
 
 ## Building the Workspace
@@ -11,6 +11,7 @@ git clone -b LidarOnly --single-branch https://github.com/OORB-Open-Organic-Robo
 Build the workspace with colcon:
 ```bash
 cd <ws_name>
+source /opt/ros/jazzy/setup.bash
 colcon build --symlink-install
 source install/setup.bash
 ```
