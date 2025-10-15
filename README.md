@@ -42,7 +42,12 @@ mkdir -p ~/rallp_ws/src
 cd ~/rallp_ws/src
 git clone https://github.com/OORB-Open-Organic-Robotics/rallp_v2.git RallpV2_ws
 
-# 2) Install dependencies (rosdep + extra apt packages)
+# 2) Fetch Git LFS assets (required for mesh files)
+cd ~/rallp_ws/src/RallpV2_ws
+git lfs install
+git lfs pull
+
+# 3) Install dependencies (rosdep + extra apt packages)
 cd ~/rallp_ws
 sudo apt update
 rosdep init   # skip if already run on your machine
@@ -51,18 +56,18 @@ rosdep install --from-paths src -y --ignore-src
 sudo apt install ros-jazzy-nav2-bringup ros-jazzy-slam-toolbox \
                  ros-jazzy-rosbridge-server ros-jazzy-xacro
 
-# 3) Optional: BlueDot support for Bluetooth teleop
+# 4) Optional: BlueDot support for Bluetooth teleop
 sudo apt install pipx
 pipx ensurepath
 pipx install bluedot
 echo 'export PYTHONPATH="$HOME/.local/share/pipx/venvs/bluedot/lib/$(ls $HOME/.local/share/pipx/venvs/bluedot/lib/)/site-packages:$PYTHONPATH"' >> ~/.bashrc
 source ~/.bashrc
 
-# 4) Build
+# 5) Build
 cd ~/rallp_ws
 colcon build --symlink-install
 
-# 5) Source before every ROS command
+# 6) Source before every ROS command
 source ~/rallp_ws/install/setup.bash
 ```
 
@@ -256,4 +261,3 @@ internet access for the hosted `roslibjs`, Chart.js, and Google Fonts assets.
 ## License
 
 See `LICENSE` for the full Apache 2.0 license text.
-

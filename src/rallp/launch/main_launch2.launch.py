@@ -1,17 +1,19 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, TimerAction
 from launch.conditions import IfCondition
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch_ros.substitutions import FindPackageShare
 import os
 import shutil
+import xacro
 
 def generate_launch_description():
 
     use_ros2_control = LaunchConfiguration('use_ros2_control')
     cmd_vel_target = LaunchConfiguration('cmd_vel_target')
+    world = LaunchConfiguration('world')
 
     # Blue Dot Node
     blue_dot = Node(
@@ -31,13 +33,9 @@ def generate_launch_description():
     twist_mux_params = os.path.join(pkg_share,'config','twist_mux.yaml')
 
     # Generate URDF from XACRO
-    xacro_executable = shutil.which('xacro')
-    if xacro_executable:
-        robot_description_content = Command([
-            xacro_executable,
-            default_model_path
-        ])
-    else:
+    try:
+        robot_description_content = xacro.process_file(default_model_path).toxml()
+    except Exception:
         with open(fallback_model_path, 'r') as urdf_file:
             robot_description_content = urdf_file.read()
 
@@ -79,21 +77,26 @@ def generate_launch_description():
 
     # Gazebo
     gazebo = ExecuteProcess(
-        cmd=['gz', 'sim', '-v', '4', '-r', PathJoinSubstitution([pkg_share, 'world', 'my_world.sdf'])],
+        cmd=['gz', 'sim', '-v', '4', '-r', world],
         output='screen'
     )
 
-    # Spawn node
-    spawn_entity = Node(
-        package='ros_gz_sim',
-        executable='create',
-        name='spawn_entity',  # Added explicit name
-        arguments=[
-            '-entity', 'rallp',
-            '-topic', '/robot_description',
-            '-z', '1'
-        ],
-        output='screen'
+    # Spawn node (delay to ensure Gazebo server is ready)
+    spawn_entity = TimerAction(
+        period=3.0,
+        actions=[
+            Node(
+                package='ros_gz_sim',
+                executable='create',
+                name='spawn_entity',
+                arguments=[
+                    '-entity', 'rallp',
+                    '-topic', '/robot_description',
+                    '-z', '1'
+                ],
+                output='screen'
+            )
+        ]
     )
 
     # Controller spawners (delay to ensure Gazebo loads first)
@@ -135,9 +138,18 @@ def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument(name='model', default_value=default_model_path, description='Absolute path to robot model file'),
         DeclareLaunchArgument(name='rvizconfig', default_value=default_rviz_config_path, description='Absolute path to rviz config file'),
-        DeclareLaunchArgument(name='enable_bluedot', default_value='False', description='Enable Blue Dot controller'),
+        DeclareLaunchArgument(
+            name='enable_bluedot',
+            default_value='False',
+            description='Enable Blue Dot controller'
+        ),
         DeclareLaunchArgument(name='use_ros2_control', default_value='False', description='Load ros2_control components'),
         DeclareLaunchArgument(name='cmd_vel_target', default_value='/cmd_vel_mux', description='Twist mux output topic'),
+        DeclareLaunchArgument(
+            name='world',
+            default_value=os.path.join(pkg_share, 'world', 'warehouse.sdf'),
+            description='Absolute path to Gazebo world file'
+        ),
         blue_dot,
         twist_mux,
         robot_state_publisher_node,
