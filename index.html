@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Oorb Rall-p Robot Interface</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/roslib/build/roslib.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header>
+    <img src="oorb_logo.png" alt="Oorb Logo" class="logo" />
+    <h1>Oorb Rall-p</h1>
+  </header>
+
+  <nav>
+    <button id="btn-control" class="active" aria-controls="control-panel" aria-selected="true" role="tab">Control Panel</button>
+    <button id="btn-monitor" aria-controls="monitor-panel" aria-selected="false" role="tab">Real-time Monitoring</button>
+  </nav>
+
+  <main>
+    <!-- Control Panel -->
+    <section id="control-panel" class="panel visible" role="tabpanel" tabindex="0">
+      <h2>Robot Control Panel</h2>
+      <label for="topicInput" class="topic-label">
+        Active topic: <span id="active-topic">/cmd_vel</span>
+      </label>
+      <div id="topic-selector">
+        <input type="text" id="topicInput" value="/cmd_vel" aria-describedby="topicDesc" />
+        <button id="setTopicBtn">Set Topic</button>
+      </div>
+      <div id="controls" aria-label="Robot movement controls">
+        <button data-cmd="forward" title="Forward" aria-label="Forward">&#8593;</button>
+        <button data-cmd="left" title="Left" aria-label="Left">&#8592;</button>
+        <button data-cmd="stop" title="Stop" aria-label="Stop">&#9632;</button>
+        <button data-cmd="right" title="Right" aria-label="Right">&#8594;</button>
+        <button data-cmd="backward" title="Backward" aria-label="Backward">&#8595;</button>
+      </div>
+      <div id="status" role="status" aria-live="polite">Not connected</div>
+    </section>
+
+    <!-- Real-Time Monitoring -->
+    <section id="monitor-panel" class="panel" role="tabpanel" tabindex="0" aria-hidden="true">
+      <h2>Real-Time Monitoring</h2>
+      <div id="topic-input-area">
+        <label for="newTopicInput" class="topic-label-monitor">Add Topic(s) to Monitor (comma separated):</label>
+        <input type="text" id="newTopicInput" placeholder="/imu, /joint_states, /image_raw" aria-describedby="monitorDesc" />
+        <button id="addTopicBtn">Add Topic</button>
+      </div>
+      <div id="sensor-panels" aria-live="polite" aria-relevant="additions">
+        <!-- Dynamic sensor panels will be inserted here -->
+      </div>
+    </section>
+  </main>
+</body>
+</html>
