@@ -91,8 +91,12 @@ the Gazebo GUI. Key launch arguments:
 | Argument             | Default            | Description                                   |
 |----------------------|--------------------|-----------------------------------------------|
 | `enable_bluedot`     | `False`            | Start the BlueDot teleop node                 |
+| `enable_joystick`    | `False`            | Start the joystick teleop launch              |
+| `enable slam`        | `False`            | Start the asynchronous SLAM toolbox launch    |
 | `use_ros2_control`   | `False`            | Spawn `joint_state_broadcaster`/`diff_cont`   |
 | `cmd_vel_target`     | `/cmd_vel_mux`     | Twist mux output topic                        |
+| `rvizconfig`         | `config2.rviz`     | RViz configuration file                       |
+| `world`              | `warehouse.sdf`    | Gazebo world file                             |
 
 ### Teleoperation options
 
@@ -110,8 +114,19 @@ the Gazebo GUI. Key launch arguments:
   The BlueDot node publishes to `/cmd_vel` (works out-of-the-box with the
   updated mux). Requires the mobile app pointing at the host.
 
-- **Joystick:** see `ros2 launch rallp joystick.launch.py` along with your
-  joystick-specific ROS drivers.
+- **Joystick:** enable via launch argument:
+  ```bash
+  ros2 launch rallp main_launch2.launch.py enable_joystick:=True
+  ```
+  This includes the joystick teleoperation launch (requires joystick drivers).
+
+### SLAM
+
+Enable asynchronous SLAM toolbox node via launch argument:
+
+```bash
+ros2 launch rallp main_launch2.launch.py enable_slam:=True
+```	
 
 ### ros2_control mode
 
@@ -164,19 +179,32 @@ Typical workflow:
    ```bash
    ros2 launch navigation localization.launch.py
    ```
+   (You can run SLAM or localization independently for isolated testing and tuning.)
 
 4. **Full navigation stack:**
    ```bash
    ros2 launch navigation navigation.launch.py
    ```
-   This includes map server, AMCL, Nav2 Planner/Controller/BT Navigator, and RViz
-   panels configured via `config/` and `maps/`.
+   This unified launch file unconditionally includes mapping, localization, and the full Nav2 navigation stack 
+   based on launch arguments (see below). It also launches RViz with configurable panels.
+   
+| Argument             | Default            | Description                                   |
+|----------------------|--------------------|-----------------------------------------------|
+| `enable_localization`| `true`             | Enable AMCL and Nav2 localization             |
+| `enable_mapping`     | `true`             | Enable SLAM Toolbox mapping                   |
+| `enable_navigation`  | `true`             | Enable full Nav2 navigation stack             |
+| `use_sim_time`       | `true`             | Use simulation/Gazebo time                    |
+| `rviz`               | `true`             | Launch RViz visualization                     |
+| `rvizconfig`         | `navigation.rviz`  | RViz configuration file                       |
+
+
 
 5. **Spawn utility without full stack:**
    ```bash
    ros2 launch navigation spawnrobot.launch.py
    ```
    Requires the `xacro` executable (`ros-jazzy-xacro`).
+   This launch file is redundant with `main_launch2.launch.py` and can be discarded to avoid confusion.
 
 Refer to `src/navigation/config/` for parameter files and `src/navigation/maps/`
 for sample maps.
