@@ -24,8 +24,7 @@ RallpV2_ws/
 │   ├── navigation/         Nav2 wrappers, maps, configs
 │   └── rallp_torque/       Torque vectoring nodes, configs, launch files
 ├── app.js, index.html, …   Web dashboard assets
-├── TORQUE_VECTORING_*.md   Torque analysis documentation
-├── simple_torque_test.py   Stand-alone torque scripts
+│
 └── README.md               This guide
 ```
 
