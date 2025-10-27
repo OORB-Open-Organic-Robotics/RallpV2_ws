@@ -1,214 +1,290 @@
 # RallP Robot Workspace
 
-This workspace (`~/rallpV2_ws/`) integrates multiple branches for the RallP robot project using ROS2 Jazzy. It combines `sensor_fusion`, `teleop_twist`, `web_dev`, and `torque_vectoring` branches into two packages: `rallp` and `rallp_torque`. Below is a description of each package and component, their functionality, and how to run them.
+End-to-end simulation, control, and testing for the RallP platform on ROS 2
+Jazzy. This workspace merges functionality from several historical branches
+(`sensor_fusion`, `teleop_twist`, `web_dev`, and `torque_vectoring`) into three
+ROS packages:
 
-## Workspace Overview
-- **Packages**:
-  - `rallp`: Core package for robot control, sensor fusion, and teleoperation.
-  - `rallp_torque`: Dedicated package for torque vectoring control and testing.
-  - `navigation`: Dedicated for sensor fusion algorithms.
-- **Web Interface**: Browser-based control and visualization using `app.js`, `index.html`, `styles.css`, and `oorb_logo.png`.
-- **Environment**: ROS2 Jazzy, built with `colcon`, using a virtual environment (`venv`).
+- `rallp` – core robot description, Gazebo simulation, teleoperation, BlueDot
+  integration, and the web dashboard assets.
+- `navigation` – Nav2-based mapping, localization, and navigation flows.
+- `rallp_torque` – torque-vectoring controllers, analysis scripts, and demos.
 
-## rallp Package
-The `rallp` package integrates `sensor_fusion`, `teleop_twist`, and `web_dev` functionality, providing core robot operations.
+The repository also ships documentation, test scripts, and static assets used
+by the torque-vectoring reports and browser dashboard.
 
-- **Functionality**:
-  - **Sensor Fusion**: Combines data from LiDAR (`sllidar_client.cpp`, `sllidar_node.cpp`), IMU, and other sensors for navigation and mapping (`nav2_bringup`, `slam_toolbox`).
-  - **Teleoperation**: Supports joystick control (`joystick.launch.py`, `twist_mux`) and BlueDot app control (`blue_dot_control2.py`).
-  - **Simulation**: Uses Gazebo for simulation (`ros_gz_sim`, `ros_gz_bridge`) with URDF (`rallp.urdf.xacro`) and SDF (`rallp2.sdf`) models.
-  - **Configuration**: Includes `config/controllers.yaml`, `config/ekf.yaml`, `config/twist_mux.yaml`, etc.
-  - **Launch Files**:
-    - `main_launch2.launch.py`: Core simulation with `twist_mux` for teleoperation.
-    - `joystick.launch.py`: Joystick-based teleoperation.
-    - `sllidar_a2m8_launch.py`: LiDAR driver.
+---
 
-## rallp_torque Package
-The `rallp_torque` package implements torque vectoring control from the `torque_vectoring` branch, enhancing traction and stability.
+## Repository Layout
 
-- **Functionality**:
-  - **Torque Vectoring**: Adjusts wheel torques dynamically (`torque_vectoring_node.py`, `torque_vectoring_tester.py`, `torque_vectoring_visualizer.py`).
-  - **Testing**: Includes test suites (`simple_torque_test.py`, `standalone_torque_test.py`, `torque_redistribution_test_suite.py`, etc.) for validation.
-  - **Configuration**: Uses `torque_vectoring.yaml`, `torque_vectoring_controllers.yaml`, and `torque_vectoring_test_config.json`.
-  - **Launch Files**:
-    - `main_launch_torque_vectoring.launch.py`: Main simulation with torque vectoring.
-    - `torque_vectoring_launch.py`: Torque-specific launch.
-   
-## navigation Package
-This package provides autonomous navigation capabilities for the robot. It integrates multiple sensors (LiDAR, IMU, encoders, and cameras) to perform sensor fusion, enabling accurate localization, mapping, and path planning.
-
-  - **Functionality**:
-    - **Sensor Fusion**: Combines LiDAR, IMU, and odometry data for robust localization.
-    - **Mapping**: Generates 2D maps in real-time using SLAM techniques.
-    - **Localization**: Estimates the robot's position and orientation in dynamic environments.
-    - **Path Planning**: Plans and follows safe paths avoiding obstacles.
-  - **Launch Files**:
-      - `navigation.launch.py` – Main launch file for the navigation package (includes mapping, localization, and path planning nodes).
-      - `spawn.launch.py` – Spawn the robot in simulation.
-      - `mapping.launch.py` – Start mapping nodes for the navigation stack.
-      - `localization.launch.py` – Start localization nodes using sensor fusion.
-
-
-## Web Interface
-The `web_dev`-related files add a browser-based interface for controlling and monitoring the RallP robot.
-
-- **Functionality**:
-  - Uses `app.js`, `index.html`, `styles.css`, and `oorb_logo.png` to provide a web dashboard.
-  - Communicates with ROS2 via `rosbridge_server` (WebSocket interface).
-  - Controls the robot via `/cmd_vel` and visualizes data like `/scan` (LiDAR).
-
-## Setup Instructions
-
-
-### ### Prerequisites
-
-First, ensure you have the following installed on **Ubuntu 24.04 LTS**:
-
-1.  **[ROS 2 Jazzy](https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html)**: Follow the official "Desktop Install" instructions.
-2.  **[Gazebo Harmonic](https://gazebosim.org/docs/harmonic/install_ubuntu)**
-3.  **[Navigation2](https://navigation.ros.org/getting_started/index.html)**: Installation is usually included with the `ros-jazzy-desktop` installation.
-
-### ### Step 1: Create Your Workspace
-Create a ROS 2 workspace to house the project.
-
-```bash
-mkdir ~/rallp_ws
-cd ~/rallp_ws
+```
+RallpV2_ws/
+├── src/
+│   ├── rallp/              Core robot package (URDF/Xacro, launch, teleop)
+│   ├── navigation/         Nav2 wrappers, maps, configs
+│   └── rallp_torque/       Torque vectoring nodes, configs, launch files
+├── app.js, index.html, …   Web dashboard assets
+│
+└── README.md               This guide
 ```
 
+Each package contains its own `package.xml`, `setup.py`, and launch/config
+directories and can be built with `colcon`.
 
-### Step 2: Clone the Repository
-Clone this repository directly into your workspace.
+---
 
-```bash
-git clone https://github.com/OORB-Open-Organic-Robotics/rallp_v2.git rallp
-```
-
-
-### Step 3: Install All Dependencies
-The recommended way to install all required ROS packages is with rosdep.
+## Quick Start
 
 ```bash
+# 1) Create a workspace and clone the repo
+mkdir -p ~/rallp_ws/src
+cd ~/rallp_ws/src
+git clone https://github.com/OORB-Open-Organic-Robotics/rallp_v2.git RallpV2_ws
+
+# 2) Fetch Git LFS assets (required for mesh files)
+cd ~/rallp_ws/src/RallpV2_ws
+git lfs install
+git lfs pull
+
+# 3) Install dependencies (rosdep + extra apt packages)
 cd ~/rallp_ws
 sudo apt update
-rosdep init
+rosdep init   # skip if already run on your machine
 rosdep update
 rosdep install --from-paths src -y --ignore-src
-```
+sudo apt install ros-jazzy-nav2-bringup ros-jazzy-slam-toolbox \
+                 ros-jazzy-rosbridge-server ros-jazzy-xacro
 
-Next, install the bluedot Python library for Bluetooth control.
-
-```bash
+# 4) Optional: BlueDot support for Bluetooth teleop
 sudo apt install pipx
 pipx ensurepath
 pipx install bluedot
-```
-
-
-### Step 4: Configure Your Environment
-You need to tell ROS where to find the bluedot library. The following command will automatically add the correct path to your shell configuration file (.bashrc).
-
-```bash
 echo 'export PYTHONPATH="$HOME/.local/share/pipx/venvs/bluedot/lib/$(ls $HOME/.local/share/pipx/venvs/bluedot/lib/)/site-packages:$PYTHONPATH"' >> ~/.bashrc
 source ~/.bashrc
-```
 
-
-### Step 5: Build the Workspace
-Compile the code using colcon.
-
-```bash
+# 5) Build
 cd ~/rallp_ws
 colcon build --symlink-install
+
+# 6) Source before every ROS command
+source ~/rallp_ws/install/setup.bash
 ```
 
-## 🚀 Usage
-Before running any ROS 2 commands, you must source your workspace in every new terminal.
+> **Tip:** keep separate terminals for Gazebo, teleop, nav2, and web-serving.
+> Run `source install/setup.bash` in each new shell.
 
-```bash
-cd ~/rallp_ws
-source install/setup.bash
-```
+---
 
-### Launching the Simulation
-This package includes two main launch files:
+## Simulation & Control (package `rallp`)
 
-1. main_launch.launch.py: Uses a basic rallp.urdf model.
-
-2. main_launch2.launch.py: Uses the more detailed rallp.urdf.xacro model with 3D meshes (recommended).
-
-To launch the recommended simulation:
+### Base Gazebo launch
 
 ```bash
 ros2 launch rallp main_launch2.launch.py
 ```
 
+`main_launch2.launch.py` loads the URDF/Xacro robot, spawns it in Gazebo
+Harmonic, starts the twist mux, robot_state_publisher, ros_gz_bridge, RViz, and
+the Gazebo GUI. Key launch arguments:
 
-### Controlling the Robot
-Once the simulation is running, open a new terminal, source your workspace again, and run the following command to control the robot with your keyboard:
+| Argument             | Default            | Description                                   |
+|----------------------|--------------------|-----------------------------------------------|
+| `enable_bluedot`     | `False`            | Start the BlueDot teleop node                 |
+| `enable_joystick`    | `False`            | Start the joystick teleop launch              |
+| `enable slam`        | `False`            | Start the asynchronous SLAM toolbox launch    |
+| `use_ros2_control`   | `False`            | Spawn `joint_state_broadcaster`/`diff_cont`   |
+| `cmd_vel_target`     | `/cmd_vel_mux`     | Twist mux output topic                        |
+| `rvizconfig`         | `config2.rviz`     | RViz configuration file                       |
+| `world`              | `warehouse.sdf`    | Gazebo world file                             |
+
+### Teleoperation options
+
+- **Keyboard (default):**
+  ```bash
+  ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/cmd_vel
+  ```
+  The node publishes the most recent keypress until another command or `Ctrl+C`
+  is received. Use `k` (or space) to stop.
+
+- **BlueDot:** enable via launch argument:
+  ```bash
+  ros2 launch rallp main_launch2.launch.py enable_bluedot:=True
+  ```
+  The BlueDot node publishes to `/cmd_vel` (works out-of-the-box with the
+  updated mux). Requires the mobile app pointing at the host.
+
+- **Joystick:** enable via launch argument:
+  ```bash
+  ros2 launch rallp main_launch2.launch.py enable_joystick:=True
+  ```
+  This includes the joystick teleoperation launch (requires joystick drivers).
+
+### SLAM
+
+Enable asynchronous SLAM toolbox node via launch argument:
 
 ```bash
-ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/diff_cont/cmd_vel_unstamped
+ros2 launch rallp main_launch2.launch.py enable_slam:=True
+```	
+
+### ros2_control mode
+
+To drive the simulated controller manager instead of the Gazebo diff-drive
+plugin:
+
+```bash
+ros2 launch rallp main_launch2.launch.py use_ros2_control:=True cmd_vel_target:=/diff_cont/cmd_vel_unstamped
 ```
 
-## Web Interface
-This package adds a browser-based interface for controlling and monitoring the RallP robot.
+Start teleop against the controller topic:
 
-- **Functionality**:
-  - Uses `app.js`, `index.html`, `styles.css`, and `oorb_logo.png` to provide a web dashboard.
-  - Communicates with ROS2 via `rosbridge_server` (WebSocket interface).
-  - Likely controls the robot via `/cmd_vel` and visualizes data like `/scan` (LiDAR).
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r cmd_vel:=/diff_cont/cmd_vel_unstamped
+```
+
+Allow ~5 seconds for the spawners (TimerActions) to bring up
+`joint_state_broadcaster` and `diff_cont`. Inspect with
+`ros2 control list controllers`.
+
+### Helpful topics & tools
+
+- `ros2 topic echo /cmd_vel` – raw teleop commands.
+- `ros2 topic echo /cmd_vel_mux` – twist_mux output (fed to Gazebo or `diff_cont`).
+- `ros2 topic hz /odom` – odometry publishing rate.
+- `ros2 run tf2_tools view_frames` – TF tree snapshot.
 
 ---
 
-### How to Run the Web Interface
+## Navigation Package (`navigation`)
 
-1. **Run ROS2 and rosbridge**
+This package wraps Nav2 bringup, SLAM Toolbox, and auxiliary launch files.
+Ensure the prerequisite debs (`ros-jazzy-nav2-bringup`, `ros-jazzy-slam-toolbox`)
+are installed.
 
-   On your robot or laptop with ROS 2 installed, in the workspace directory:
+Typical workflow:
 
+1. **Spawn the robot in Gazebo (if not already running):**
    ```bash
-   ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+   ros2 launch rallp main_launch2.launch.py
    ```
 
-  By default, rosbridge server runs at ws://localhost:9090.
+2. **Launch mapping (SLAM Toolbox):**
+   ```bash
+   ros2 launch navigation mapping.launch.py
+   ```
+   Generates a 2D map on `/map`. Save with `ros2 run nav2_map_server map_saver_cli -f ~/maps/rallp_map`.
 
-2.  **Serve the Web Interface**
+3. **Localization-only launch (AMCL + Nav2):**
+   ```bash
+   ros2 launch navigation localization.launch.py
+   ```
+   (You can run SLAM or localization independently for isolated testing and tuning.)
 
-  Navigate in your terminal to the workspace directory containing the web interface files (app.js, index.html, etc.), then run a simple HTTP server:
+4. **Full navigation stack:**
+   ```bash
+   ros2 launch navigation navigation.launch.py
+   ```
+   This unified launch file unconditionally includes mapping, localization, and the full Nav2 navigation stack 
+   based on launch arguments (see below). It also launches RViz with configurable panels.
+   
+| Argument             | Default            | Description                                   |
+|----------------------|--------------------|-----------------------------------------------|
+| `enable_localization`| `true`             | Enable AMCL and Nav2 localization             |
+| `enable_mapping`     | `true`             | Enable SLAM Toolbox mapping                   |
+| `enable_navigation`  | `true`             | Enable full Nav2 navigation stack             |
+| `use_sim_time`       | `true`             | Use simulation/Gazebo time                    |
+| `rviz`               | `true`             | Launch RViz visualization                     |
+| `rvizconfig`         | `navigation.rviz`  | RViz configuration file                       |
 
-  ```bash
-  python3 -m http.server 8000
-  ```
 
-3. **Open the Web Interface**
 
-  In your web browser, go to:
+5. **Spawn utility without full stack:**
+   ```bash
+   ros2 launch navigation spawnrobot.launch.py
+   ```
+   Requires the `xacro` executable (`ros-jazzy-xacro`).
+   This launch file is redundant with `main_launch2.launch.py` and can be discarded to avoid confusion.
 
-  http://localhost:8000
+Refer to `src/navigation/config/` for parameter files and `src/navigation/maps/`
+for sample maps.
 
-  ### Usage
-  
-  - **Control Panel**
-    Use the **Control Panel** tab to publish robot movement commands.
+---
 
-    The **Active topic** defaults to `/cmd_vel` but can be changed by typing a new topic and clicking Set Topic.
+## Torque Vectoring Package (`rallp_torque`)
 
-    Control buttons — Forward, Backward, Left, Right, and Stop — send velocity commands using the chosen topic.
+Focused on traction control research. Key entry points:
 
-    The status bar shows connection status and the last command sent.
-    
-  - **Real-Time Monitoring**
-    Switch to the Real-Time Monitoring tab to subscribe dynamically to sensor topics.
+- `ros2 launch rallp_torque main_launch_torque_vectoring.launch.py` – Gazebo
+  simulation plus torque controller nodes.
+- `ros2 launch rallp_torque torque_vectoring_launch.py` – brings up only the
+  torque logic alongside minimal simulation.
+- Python scripts at the workspace root (`simple_torque_test.py`,
+  `standalone_torque_test.py`) exercise algorithms without ROS.
 
-    Enter one or more topic names separated by commas (e.g., `/imu`, `/joint_states`, `/image_raw`).
+Configuration lives under `src/rallp_torque/config/` and documentation in
+`TORQUE_VECTORING_README.md`, `TORQUE_VECTORING_TEST_STRATEGY.md`, and related
+reports.
 
-    Click Add Topic to start subscription.
+---
 
-    Panels will be created for each topic:
+## Web Dashboard
 
-    Numeric topics (e.g., IMU, joint states) show real-time graphs of numeric fields.
+Files (`index.html`, `app.js`, `styles.css`, `oorb_logo.png`) provide a
+browser-based controller and monitoring panel powered by rosbridge/roslibjs.
+The UI is split into **Control Panel** (publishes geometry commands) and
+**Real-Time Monitoring** (dynamic subscriptions with Chart.js visualization).
 
-    Image topics (e.g., `/image_raw`) render live images.
+### Run the dashboard
 
-    The layout adjusts dynamically as you add topics.
+```bash
+# Terminal 1 – rosbridge websocket server
+source ~/rallp_ws/install/setup.bash
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+
+# Terminal 2 – serve static files
+cd ~/rallp_ws/src/RallpV2_ws
+python3 -m http.server 8000
+```
+
+Open `http://localhost:8000/` in a modern browser. Ensure the machine has
+internet access for the hosted `roslibjs`, Chart.js, and Google Fonts assets.
+
+---
+
+## Testing & Utilities
+
+- `ros2 test` targets are sparse; most validation lives in Python scripts under
+  the repo root and in `src/rallp_torque/test/`.
+- Use `colcon test` to execute available unit tests.
+- Additional guides such as `TESTING_GUIDE.md`, `VALIDATION_REPORT.md`, and
+  torque documentation describe manual procedures.
+
+---
+
+## Troubleshooting
+
+- **`Package 'nav2_bringup' not found`** – install `ros-jazzy-nav2-bringup`.
+- **`Package 'slam_toolbox' not found`** – install `ros-jazzy-slam-toolbox`.
+- **`file not found: 'xacro'`** – install `ros-jazzy-xacro`.
+- **Gazebo reports `cmd_vel` but robot does not move** – Ensure teleop publishes
+  to `/cmd_vel` (default). Use `ros2 topic echo /cmd_vel_mux` to confirm mux
+  output.
+- **BlueDot not connecting** – verify the Bluetooth device is paired and the
+  BlueDot app points at the host IP.
+- **Web dashboard cannot connect** – confirm rosbridge is running on port 9090
+  and that the browser console shows a successful websocket connection.
+
+---
+
+## Contributing
+
+1. Create a feature branch.
+2. Run `colcon build` and relevant launch files to validate changes.
+3. Update documentation/tests when behavior changes.
+4. Submit a pull request describing the scenario and verification steps.
+
+---
+
+## License
+
+See `LICENSE` for the full Apache 2.0 license text.

@@ -47,6 +47,16 @@ source install/setup.zsh
 # Test 1: Basic robot simulation with torque vectoring
 ros2 launch rallp main_launch_torque_vectoring.launch.py
 
+Arguments:
+
+| Argument                 | Default            | Description                                                                             |
+|--------------------------|--------------------|-----------------------------------------------------------------------------------------|
+| `enable_torque_vectoring`| `true`             | Enables or disables the torque vectoring control system node.                           |
+| `use_python_torque_node` | `false`            | Choose between C++ (`false`) and Python (`true`) torque vectoring node implementations. |
+| `enable_visualization`   | `false`            | Enables debug visualization node for torque vectoring.                                  |
+| `use_sim_time`           | `true`             | Use simulation (/clock) time. Set to false for real robot deployments.                  |
+
+
 # Test 2: Standalone torque vectoring node
 ros2 launch rallp torque_vectoring_launch.py
 
