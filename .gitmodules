@@ -1,5 +1,5 @@
 [submodule "RALLP_V2_Firmware"]
-	path = RallpV2_Firmware
+	path = Rallp_V2_Firmware
 	url = https://github.com/OORB-Open-Organic-Robotics/RALLP_V2_Firmware.git
 [submodule "rallp_v2"]
 	path = rallp_v2
