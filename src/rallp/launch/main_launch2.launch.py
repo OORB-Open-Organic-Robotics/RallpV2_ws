@@ -15,6 +15,7 @@ def generate_launch_description():
     use_ros2_control = LaunchConfiguration('use_ros2_control')
     cmd_vel_target = LaunchConfiguration('cmd_vel_target')
     world = LaunchConfiguration('world')
+    use_sim_time = LaunchConfiguration('use_sim_time')
     enable_bluedot = LaunchConfiguration('enable_bluedot')
     enable_joystick = LaunchConfiguration('enable_joystick')
     enable_slam = LaunchConfiguration('enable_slam')
@@ -42,7 +43,7 @@ def generate_launch_description():
         package='rallp',
         executable='blue_dot_control2',
         output='screen',
-        parameters=[{'use_sim_time': True}],
+        parameters=[{'use_sim_time': use_sim_time}],
         condition=IfCondition(enable_bluedot)
     )
 
@@ -55,7 +56,10 @@ def generate_launch_description():
     # Include SLAM launch conditionally
     slam_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_share, 'launch', 'online_async_launch.py')),
-        condition=IfCondition(enable_slam)
+        condition=IfCondition(enable_slam),
+        launch_arguments={
+            'use_sim_time': use_sim_time
+        }.items()
     )
 
     # Robot state publisher node
@@ -64,7 +68,7 @@ def generate_launch_description():
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
-        parameters=[robot_description, {'use_sim_time': True}]
+        parameters=[robot_description, {'use_sim_time': use_sim_time}]
     )
 
     # Twist Mux node
@@ -75,7 +79,7 @@ def generate_launch_description():
         output='screen',
         parameters=[
             twist_mux_params, 
-            {'use_sim_time': True}
+            {'use_sim_time': use_sim_time}
         ],
         remappings=[
             ('/cmd_vel_out', cmd_vel_target)
@@ -89,7 +93,7 @@ def generate_launch_description():
         name='rviz2',
         output='screen',
         arguments=['-d', rvizconfig],
-        parameters=[{'use_sim_time': True}],
+        parameters=[{'use_sim_time': use_sim_time}],
     )
 
     # Gazebo
@@ -162,6 +166,7 @@ def generate_launch_description():
         DeclareLaunchArgument(name='use_ros2_control', default_value='False', description='Load ros2_control components'),
         DeclareLaunchArgument(name='cmd_vel_target', default_value='/cmd_vel_mux', description='Twist mux output topic'),
         DeclareLaunchArgument(name='world', default_value=os.path.join(pkg_share, 'world', 'warehouse.sdf'), description='Absolute path to Gazebo world file'),
+        DeclareLaunchArgument(name='use_sim_time', default_value='true', description='Use simulation time for ROS nodes'),
 
         blue_dot,
         joystick_launch,
