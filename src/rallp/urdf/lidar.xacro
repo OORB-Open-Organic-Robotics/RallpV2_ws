@@ -31,8 +31,9 @@
     <gazebo reference="lidar_link">
       <sensor name="lidar_sensor" type="gpu_lidar">
         <pose>0 0 0 0 0 0</pose>
-        <topic>/scan</topic>
         <update_rate>15</update_rate>
+        <topic>scan</topic>
+        <gz_frame_id>lidar_link</gz_frame_id>
         <ray>
           <scan>
             <horizontal>
@@ -58,12 +59,8 @@
             <stddev>0.01</stddev>
           </noise>
         </ray>
-        <plugin name="gz_lidar" filename="libgazebo_ros_laser.so">
-          <frame_name>lidar_link</frame_name>
-        </plugin>
       </sensor>
     </gazebo>
   </xacro:macro>
 </robot>
-
 

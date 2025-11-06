@@ -19,6 +19,13 @@
   gz_type_name: "gz.msgs.Odometry"
   direction: GZ_TO_ROS
 
+# gz TF tree published by Gazebo plugins (e.g., DiffDrive)
+- ros_topic_name: "/tf"
+  gz_topic_name: "/tf"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+
 # gz topic subscribed to by DiffDrive plugin
 - ros_topic_name: "cmd_vel_mux"
   gz_topic_name: "cmd_vel"
