@@ -1,4 +1,18 @@
-# RallP Robot Workspace
+# RALLP-v2
+![RALLP-v2](RALL-Pv2.jpeg)
+
+RALLP-v2 is a rugged, battery-powered Autonomous all-terrain robot platform that drives itself over rough ground and lets teams snap on new tools (cameras, sprayers, sensors, arms) without redesigning the machine.
+
+- Built for real terrain: sealed suspension and 4-wheel drive keep moving on dirt, gravel, grass, and warehouse floors.
+- Plug-and-play payloads: standardized power/data ports so modules can be swapped in minutes.
+- Out-of-the-box autonomy with SLAM: maps its surroundings, plans paths, and can also be driven by phone, web dashboard, or joystick.
+- Software Support: It plugs straight into OORB Studio for no-code mission setup, live telemetry, and remote updates.
+- Faster deployment: pre-integrated ROS 2 software stack, web UI, and test scripts cut setup time from weeks to hours.
+- Lower total cost: in-house drive unit and modular design mean fewer custom builds and cheaper maintenance.
+- Ready use cases: crop scouting, perimeter patrols, logistics runs, and lab research where a reliable mobile base is needed.
+- Proven in sim and hardware: validated in Gazebo simulations and current V2 bring-up on real units.
+
+# The RallP V2 Robot codebase
 
 End-to-end simulation, control, and testing for the RallP platform on ROS 2
 Jazzy. This workspace merges functionality from several historical branches
