@@ -5,3 +5,6 @@
 	path = rallp_v2
 	url = https://github.com/OORB-Open-Organic-Robotics/rallp_v2.git
 	branch = rallp_v2.0
+[submodule "RallpV2_ROS2"]
+	path = RallpV2_ROS2
+	url = git@github.com:OORB-Open-Organic-Robotics/RallpV2_ROS2.git
