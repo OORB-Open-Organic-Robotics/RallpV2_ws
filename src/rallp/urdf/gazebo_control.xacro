@@ -37,8 +37,8 @@
       <joint_name>rr_joint</joint_name> <!-- Added rear right joint -->
     </plugin>
   </gazebo>
+<!--
 
-  <!-- Lidar Sensor -->
   <gazebo reference="lidar_link">
     <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
        <render_engine>ogre2</render_engine>
@@ -62,7 +62,7 @@
       <update_rate>10</update_rate>
     </sensor>
   </gazebo>
-
+-->
   <!-- Base Footprint Plugin -->
   <gazebo>
       <frame_id>base_link</frame_id>

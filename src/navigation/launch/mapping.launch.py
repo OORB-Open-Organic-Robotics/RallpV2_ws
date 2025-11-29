@@ -12,7 +12,7 @@ def generate_launch_description():
     pkg_navigation = get_package_share_directory('navigation')
 
     use_sim_time_arg = DeclareLaunchArgument(
-        'use_sim_time', default_value='true',
+        'use_sim_time', default_value='false',
         description='Use simulation time',
         choices=['true', 'false']
     )
@@ -71,7 +71,7 @@ def generate_launch_description():
     ld.add_action(LogInfo(msg=['rviz:', LaunchConfiguration('rviz')]))
     ld.add_action(LogInfo(msg=['rviz_config:', LaunchConfiguration('rviz_config')]))
 
-    ld.add_action(rviz_node)
+#    ld.add_action(rviz_node)
     ld.add_action(slam_toolbox_launch)
 
     return ld
