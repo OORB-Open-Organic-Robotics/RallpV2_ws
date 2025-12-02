@@ -1,7 +1,7 @@
-[submodule "RALLP_V2_Firmware"]
+[submodule "RallpV2_STM32"]
 	path = RALLP_V2_Firmware
 	url = https://github.com/OORB-Open-Organic-Robotics/RALLP_V2_Firmware.git
-[submodule "rallp_v2"]
+[submodule "RallpV2_Simulation"]
 	path = rallp_v2
 	url = git@github.com:OORB-Open-Organic-Robotics/rallp_v2.git
 	branch = rallp_v2.0
