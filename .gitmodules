@@ -1,0 +1,3 @@
+[submodule "firmware/RALLP_V2_Firmware"]
+	path = firmware/RALLP_V2_Firmware
+	url = https://github.com/OORB-Open-Organic-Robotics/RALLP_V2_Firmware.git
