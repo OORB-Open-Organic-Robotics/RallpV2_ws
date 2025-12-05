@@ -1,0 +1,28 @@
+# ROS 2 / colcon build
+build/
+install/
+log/
+
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.cmake
+Makefile
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Submodule build artifacts (firmware)
+firmware/*/build/
+firmware/*/cmake-build*/
+firmware/*/.pio/
